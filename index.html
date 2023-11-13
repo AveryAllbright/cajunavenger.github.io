@@ -314,7 +314,6 @@ canvas {
 	var domlink = window.location.protocol + "//" + window.location.host + "/";
 	var type_order = ["", "Normal", "Fire", "Water", "Grass", "Electric", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy", "Starter", "Gimmick", "Legendary", "Favorite"];
 	var type_eles = ["Normal", "Fire", "Water", "Grass", "Electric", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy", "Starter", "GimmickForm", "Legend", "FavAlone"];
-	var other_order = ["", "team1", "team2", "team3", "team4", "team5", "team6", "Bird", "Critter", "RegionalBug", "Pseudo", "Pikaclone", "Eevee", "Fossil", "Regional", "GMax", "Box", "Mythical", "Ultra", "Paradox", "Types", "PokeBall", "Spinda", "Vivillon", "Alcremie", "alc0", "alc7", "alc14", "alc21", "alc28", "alc35", "alc42", "alc49", "alc56", "Baby", "NewEvolution"];
 	var zerogen_coords = [
 		[],
 		[94, 1264], [199, 1264], [298, 1264],
@@ -333,16 +332,6 @@ canvas {
 	var teamSelect = false;
 	var toppings = false;
 
-	var spot_map = {
-		"spot1x": "spot1",
-		"spot1y": "spot1",
-		"spot2x": "spot2",
-		"spot2y": "spot2",
-		"spot3x": "spot3",
-		"spot3y": "spot3",
-		"spot4x": "spot4",
-		"spot4y": "spot4"
-	}
 	var cookie_names = [
 		"gen0", "gen1", "gen2", "gen3", "gen4",
 		"gen5", "gen6", "gen7", "gen8", "gen9",
@@ -526,15 +515,7 @@ canvas {
 		if(shinyCharm) {
 			toggleShiny(gen, type);
 			return;
-		}else if(teamSelect) {
-			// copy to team
-			choices[currently_selecting[0]][currently_selecting[1]] = choices[gen][type]
-			var ele = document.getElementById('box'+gen+"_"+type);
-			var ele2 = document.getElementById('box'+currently_selecting[0]+"_"+currently_selecting[1]);
-			ele2.src = ele.src;
-			currently_selecting = null;
-			teamSelect = false;
-			return;
+		}
 		}else if(gen == 0 && type < 7) {
 			// pick a team slot
 			teamSelect = true;
@@ -930,67 +911,7 @@ canvas {
 				start_at += 9 + font_size;
 			}
 		}
-		// draw Team
-		var te = document.getElementById("Team");
-		var font_px = (te.style.fontSize || "27px")
-		var font_size = parseInt(font_px.replace(/px/, ""));
-		var canvas_font = font_px + " " + font_name
-		ctx.font = canvas_font;
-		if(te) {
-			te = te.innerHTML;
-		}else{
-			te = "Team";
-		}
-		ctx.fillText(te, 240, 1245)
-		canvas.style.zIndex = -1;
-		var dbutton = document.getElementById("downloader")
-		dbutton.href = canvas.toDataURL("image/png");
-		dbutton.innerHTML = getTranslString("downloader");
-		dbutton.click()
 	}
-	function spindaSpot(ele, axis) {
-		var spot_ele = document.getElementById(spot_map[ele.id])
-		if(axis == "x") {
-			var base_left = 1604;
-			spot_ele.style.left = base_left + parseInt(ele.value);
-		}else{
-			var base_top = 1417;
-			spot_ele.style.top = base_top - parseInt(ele.value);
-		}
-		writeSpindaCookie();
-	}
-
-	function rand(scale) {
-		return Math.floor(Math.random()*scale)
-	}
-	function randomSpinda(ar) {
-		var spots = ["spot1", "spot2", "spot3", "spot4"];
-		if(!ar) {
-			ar = ["spindaspots"];
-			for(var s in spots) {
-				ar.push(rand(17));
-				ar.push(rand(17));
-			}
-		}
-		var base_left = 1604;
-		var base_top = 1417;
-		for(var i=0; i<spots.length; i++) {
-			var sname = spots[i];
-			var spot_ele = document.getElementById(sname);
-			var new_x = ar[2*i+1];
-			var new_y = ar[2*i+2];
-			spot_ele.style.left = base_left + parseInt(new_x);
-			spot_ele.style.top = base_top - parseInt(new_y);
-			document.getElementById(sname + "x").value = new_x;
-			document.getElementById(sname + "y").value = new_y;
-		}
-		if(!choices[0][22] == "SPINDA") {
-			choices[0][22] = "SPINDA";
-			writeCookie(0)
-		}
-		writeSpindaCookie()
-	}
-
 	function calcTypes() {
 		var scores = {};
 		for(var t in type_count_array)
@@ -1076,19 +997,6 @@ canvas {
 		}
 		setCookie(getCookieName(g), cookie_text);
 	}
-	function writeSpindaCookie() {
-		var spots = ["spot1", "spot2", "spot3", "spot4"];
-		var cookie_text = "spindaspots,";
-		for(var i=0; i<spots.length; i++) {
-			var sname = spots[i];
-			var spot_ele = document.getElementById(sname);
-			cookie_text += document.getElementById(sname + "x").value;
-			cookie_text += ",";
-			cookie_text += document.getElementById(sname + "y").value;
-			cookie_text += ",";
-		}
-		setCookie("spinda", cookie_text);
-	}
 	function loadCookies() {
 		var lang_code = window.location.href.match(/\?lang=([^&]+)/);
 		if(lang_code) {
@@ -1146,12 +1054,6 @@ canvas {
 <!--<img class="back" id="back" src="https://cajunavenger.github.io/background.png" alt="" height="1571" width="2276" onclick="closeBox();"/>-->
 <img class="back" id="back" src="https://cajunavenger.github.io/background3.png" alt="" height="1571" width="2276" onclick="closeBox();"/>
 <canvas id="final" height="1571" width="2276"></canvas>
-<img class="selectionBox team-top team-left" id="box0_1" onclick="openBox(0, 1);" src="./blank.png" height="96" width="96">
-<img class="selectionBox team-top team-mid" id="box0_2" onclick="openBox(0, 2);" src="./blank.png" height="96" width="96">
-<img class="selectionBox team-top team-right" id="box0_3" onclick="openBox(0, 3);" src="./blank.png" height="96" width="96">
-<img class="selectionBox team-bottom team-left" id="box0_4" onclick="openBox(0, 4);" src="./blank.png" height="96" width="96">
-<img class="selectionBox team-bottom team-mid" id="box0_5" onclick="openBox(0, 5);" src="./blank.png" height="96" width="96">
-<img class="selectionBox team-bottom team-right" id="box0_6" onclick="openBox(0, 6);" src="./blank.png" height="96" width="96">
 <img class="selectionBox gen-1-box type-1-box" id="box1_1" onclick="openBox(1, 1);" src="./blank.png" height="96" width="96">
 <img class="selectionBox gen-1-box type-2-box" id="box1_2" onclick="openBox(1, 2);" src="./blank.png" height="96" width="96">
 <img class="selectionBox gen-1-box type-3-box" id="box1_3" onclick="openBox(1, 3);" src="./blank.png" height="96" width="96">
@@ -1350,28 +1252,7 @@ canvas {
 <img class="selectionBox gen-9-box type-20-box" id="box9_20" onclick="openBox(9, 20);" src="./blank.png" height="96" width="96">
 <img class="selectionBox gen-9-box type-21-box" id="box9_21" onclick="openBox(9, 21);" src="./blank.png" height="96" width="96">
 <img class="selectionBox gen-9-box type-22-box" id="box9_22" onclick="openBox(9, 22);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-1-box" id="box10_1" onclick="openBox(10, 1);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-2-box" id="box10_2" onclick="openBox(10, 2);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-3-box" id="box10_3" onclick="openBox(10, 3);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-4-box" id="box10_4" onclick="openBox(10, 4);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-5-box" id="box10_5" onclick="openBox(10, 5);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-6-box" id="box10_6" onclick="openBox(10, 6);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-7-box" id="box10_7" onclick="openBox(10, 7);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-8-box" id="box10_8" onclick="openBox(10, 8);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-9-box" id="box10_9" onclick="openBox(10, 9);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-10-box" id="box10_10" onclick="openBox(10, 10);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-11-box" id="box10_11" onclick="openBox(10, 11);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-12-box" id="box10_12" onclick="openBox(10, 12);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-13-box" id="box10_13" onclick="openBox(10, 13);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-14-box" id="box10_14" onclick="openBox(10, 14);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-15-box" id="box10_15" onclick="openBox(10, 15);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-16-box" id="box10_16" onclick="openBox(10, 16);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-17-box" id="box10_17" onclick="openBox(10, 17);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-18-box" id="box10_18" onclick="openBox(10, 18);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-19-box" id="box10_19" onclick="openBox(10, 19);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-20-box" id="box10_20" onclick="openBox(10, 20);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-21-box" id="box10_21" onclick="openBox(10, 21);" src="./blank.png" height="96" width="96">
-<img class="selectionBox fav-type-box type-22-box" id="box10_22" onclick="openBox(10, 22);" src="./blank.png" height="96" width="96"><img class="charm" id="charm" src="./charm.png" alt="" height="64" width="64" onclick="activateShiny();" />
+<img class="charm" id="charm" src="./charm.png" alt="" height="64" width="64" onclick="activateShiny();" />
 
 <img class="preview" id="preview0" src="./blank.png" height="96" width="96" onclick="pickMon(0);">
 <img class="preview" id="preview1" src="./blank.png" height="96" width="96" onclick="pickMon(1);">
