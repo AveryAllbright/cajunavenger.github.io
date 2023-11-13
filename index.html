@@ -180,21 +180,6 @@ canvas {
 .gen-9-box {
 	top: 893px;
 }
-.fav-type-box {
-	top: 992px;
-}
-.bottom-row1-box {
-	top: 1210px;
-}
-.bottom-row2-box {
-	top: 1409px;
-}
-.bottom-row1-label {
-	top: 1132px;
-}
-.bottom-row2-label {
-	top: 1331px;
-}
 .type-1-box {
 	left: 100px;
 }
@@ -314,16 +299,6 @@ canvas {
 	var domlink = window.location.protocol + "//" + window.location.host + "/";
 	var type_order = ["", "Normal", "Fire", "Water", "Grass", "Electric", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy", "Starter", "Gimmick", "Legendary", "Favorite"];
 	var type_eles = ["Normal", "Fire", "Water", "Grass", "Electric", "Ice", "Fighting", "Poison", "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy", "Starter", "GimmickForm", "Legend", "FavAlone"];
-	var zerogen_coords = [
-		[],
-		[94, 1264], [199, 1264], [298, 1264],
-		[94, 1363], [199, 1363], [298, 1363],
-		[521, 1210], [703, 1210], [885, 1210], [1065, 1210], [1248, 1210], [1430, 1210], [1612, 1210], [1794, 1210], [1976, 1210],
-		[521, 1409], [703, 1409], [885, 1409], [1065, 1409], [1248, 1409], [1430, 1409], [1612, 1409], [1794, 1409], [1976, 1409],
-		[1976, 1409], [1976, 1409], [1976, 1409], [1976, 1409], [1976, 1409], [1976, 1409], [1976, 1409], [1976, 1409], [1976, 1409],
-		[2158, 1210], [2158, 1409]
-	]
-
 	var choices = [];
 	var currently_previewing = [];
 	var currently_selecting = null;
@@ -603,10 +578,6 @@ canvas {
 		// position the bubble
 		var left_corner = (type*99)+96
 		var top_corner = (gen*99)+99
-		if(gen == 0) {
-			left_corner = zerogen_coords[Math.min(35, type)][0] + 100
-			top_corner = zerogen_coords[Math.min(35, type)][1] + 100
-		}
 		var rightp = left_corner + Math.max(100, 100*max_cols);
 		var botp = top_corner + Math.max(99, 99*row_numbers.length);
 		if(rightp > 2276)
